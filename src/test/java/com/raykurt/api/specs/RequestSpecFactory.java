@@ -18,7 +18,7 @@ public final class RequestSpecFactory {
         return new RequestSpecBuilder()
                 .setBaseUri(ConfigReader.get("base.url"))
                 .setContentType(ContentType.JSON)
-                .setAccept(ContentType.JSON)
+                .setAccept("application/json")
                 .build();
     }
 
