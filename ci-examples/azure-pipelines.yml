@@ -1,0 +1,33 @@
+# Example Azure DevOps pipeline for this framework (not used by GitHub).
+trigger:
+  branches:
+    include: [ main ]
+
+parameters:
+  - name: tags
+    displayName: Cucumber tag expression
+    type: string
+    default: "not @manual and not @wip"
+  - name: env
+    displayName: Environment (config-<env>.properties)
+    type: string
+    default: ci
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: "17"
+      jdkArchitectureOption: x64
+      jdkSourceOption: PreInstalled
+
+  - script: mvn -B test "-Denv=${{ parameters.env }}" "-Dcucumber.filter.tags=${{ parameters.tags }}"
+    displayName: Run API tests
+
+  - task: PublishBuildArtifacts@1
+    condition: always()
+    inputs:
+      PathtoPublish: target/cucumber-reports
+      ArtifactName: cucumber-reports

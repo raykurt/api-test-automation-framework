@@ -1,0 +1,52 @@
+name: API Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Nightly smoke run at 03:00 UTC
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Cucumber tag expression (e.g. @smoke, @regression and not @security)"
+        required: false
+        default: "not @manual and not @wip"
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Choose the tags to run
+        id: tags
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "value=@smoke" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ github.event.inputs.tags }}" ]; then
+            echo "value=${{ github.event.inputs.tags }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=not @manual and not @wip" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run the tests
+        run: mvn -B test -Denv=ci "-Dcucumber.filter.tags=${{ steps.tags.outputs.value }}"
+
+      - name: Upload Cucumber reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-reports
+          path: target/cucumber-reports/

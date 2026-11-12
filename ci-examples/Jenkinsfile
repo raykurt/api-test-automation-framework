@@ -1,0 +1,28 @@
+// Example Jenkins pipeline for this framework (not used by GitHub).
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'TAGS', defaultValue: 'not @manual and not @wip', description: 'Cucumber tag expression')
+        string(name: 'ENV', defaultValue: 'ci', description: 'Environment (config-<env>.properties)')
+    }
+
+    tools {
+        jdk 'jdk17'
+        maven 'maven3'
+    }
+
+    stages {
+        stage('API tests') {
+            steps {
+                sh "mvn -B test -Denv=${params.ENV} \"-Dcucumber.filter.tags=${params.TAGS}\""
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'target/cucumber-reports/**', allowEmptyArchive: true
+        }
+    }
+}
