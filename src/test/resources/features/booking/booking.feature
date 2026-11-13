@@ -53,3 +53,12 @@ Feature: Booking API
       | 1     |
       | 550   |
       | 9999  |
+
+  @regression @TC-1007
+  Scenario: Admin replaces all data of a booking
+    Given an existing booking
+    When the admin replaces the booking with new data
+    Then the response status code should be 200
+    And the booking should match the sent data
+    When the user gets the booking
+    Then the booking should match the sent data
