@@ -98,6 +98,7 @@ Reports are written to `target/cucumber-reports/` (HTML and JSON). In GitHub Act
 | TC-1004 | Admin deletes a booking, then it returns 404 (polled with Awaitility) | regression |
 | TC-1005 | A booking cannot be deleted without a token (403) | security, regression |
 | TC-1006 | Create bookings with different total prices (Scenario Outline) | regression |
+| TC-1007 | Admin replaces all data of a booking, then GET returns the same data | regression |
 | TC-2001 | Admin gets a token with valid credentials | smoke, regression |
 | TC-2002 | No token for invalid credentials (Scenario Outline) | negative, regression |
 | TC-1901–1902 | Manual checks (admin screen dates, response headers) | manual |
