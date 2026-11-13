@@ -89,6 +89,18 @@ public class BookingSteps {
                     .patch(BOOKING + "/{id}"));
     }
 
+    @When("the admin replaces the booking with new data")
+    public void theAdminReplacesTheBookingWithNewData() {
+        context.setRequestBody(BookingBody.validBooking());
+        context.setResponse(
+                given()
+                    .spec(RequestSpecFactory.authorizedSpec(AuthHelper.getAdminToken()))
+                    .pathParam("id", context.getBookingId())
+                    .body(context.getRequestBody())
+                .when()
+                    .put(BOOKING + "/{id}"));
+    }
+
     @When("the admin deletes the booking")
     public void theAdminDeletesTheBooking() {
         context.setResponse(
@@ -115,6 +127,15 @@ public class BookingSteps {
     public void theResponseShouldContainTheSentBookingData() {
         Booking actual = context.getResponse().as(CreateBookingResponse.class).getBooking();
 
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(context.getRequestBody());
+    }
+
+    @Then("the booking should match the sent data")
+    public void theBookingShouldMatchTheSentData() {
+        // PUT and GET return the booking object directly (not wrapped like POST)
+        Booking actual = context.getResponse().as(Booking.class);
         assertThat(actual)
                 .usingRecursiveComparison()
                 .isEqualTo(context.getRequestBody());
