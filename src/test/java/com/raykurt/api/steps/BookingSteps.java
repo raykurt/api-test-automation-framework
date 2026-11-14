@@ -144,6 +144,12 @@ public class BookingSteps {
                 .isEqualTo(context.getRequestBody());
     }
 
+    @Then("the search result should contain the created booking")
+    public void theSearchResultShouldContainTheCreatedBooking() {
+        List<Integer> ids = context.getResponse().jsonPath().getList("bookingid", Integer.class);
+        assertThat(ids).contains(context.getBookingId());
+    }
+
     @Then("the booking should match the sent data")
     public void theBookingShouldMatchTheSentData() {
         // PUT and GET return the booking object directly (not wrapped like POST)
