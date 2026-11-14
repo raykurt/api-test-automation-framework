@@ -47,7 +47,6 @@ Feature: Booking API
     Then the response status code should be 200
     When the user gets the booking
     Then the booking total price should be <price>
-
     Examples:
       | price |
       | 1     |
@@ -62,3 +61,10 @@ Feature: Booking API
     And the booking should match the sent data
     When the user gets the booking
     Then the booking should match the sent data
+    
+  @regression @TC-1008
+  Scenario: Find a booking by the guest's name
+    Given an existing booking
+    When the user searches bookings by the guest's first and last name
+    Then the response status code should be 200
+    And the search result should contain the created booking
