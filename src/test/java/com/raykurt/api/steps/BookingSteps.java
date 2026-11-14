@@ -101,6 +101,18 @@ public class BookingSteps {
                     .put(BOOKING + "/{id}"));
     }
 
+    @When("the user searches bookings by the guest's first and last name")
+    public void theUserSearchesBookingsByTheGuestsName() {
+        Booking sent = context.getRequestBody();
+        context.setResponse(
+                given()
+                    .spec(RequestSpecFactory.defaultSpec())
+                    .queryParam("firstname", sent.getFirstname())
+                    .queryParam("lastname", sent.getLastname())
+                .when()
+                    .get(BOOKING));
+    }
+
     @When("the admin deletes the booking")
     public void theAdminDeletesTheBooking() {
         context.setResponse(
