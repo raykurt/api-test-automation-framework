@@ -76,3 +76,9 @@ Feature: Booking API
     Then the response status code should be 403
     When the user gets the booking
     Then the booking should match the sent data
+
+  @negative @regression @TC-1010
+  Scenario: A booking that does not exist returns 404
+    Given a booking id that does not exist
+    When the user gets the booking
+    Then the response status code should be 404
