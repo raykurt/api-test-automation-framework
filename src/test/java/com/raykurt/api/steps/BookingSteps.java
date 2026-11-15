@@ -54,6 +54,11 @@ public class BookingSteps {
                 .isEqualTo(200);
     }
 
+    @Given("a booking id that does not exist")
+    public void aBookingIdThatDoesNotExist() {
+        context.setBookingId(999_999_999);
+    }
+
     // ---------- When ----------
 
     @When("the user creates the booking")
