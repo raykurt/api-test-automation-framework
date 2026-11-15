@@ -113,6 +113,17 @@ public class BookingSteps {
                     .get(BOOKING));
     }
 
+    @When("the user replaces the booking without a token")
+    public void theUserReplacesTheBookingWithoutAToken() {
+        context.setResponse(
+                given()
+                    .spec(RequestSpecFactory.defaultSpec())
+                    .pathParam("id", context.getBookingId())
+                    .body(BookingBody.validBooking())
+                .when()
+                    .put(BOOKING + "/{id}"));
+    }
+
     @When("the admin deletes the booking")
     public void theAdminDeletesTheBooking() {
         context.setResponse(
