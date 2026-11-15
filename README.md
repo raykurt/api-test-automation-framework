@@ -58,6 +58,7 @@ ci-examples/                             → the same run as an Azure DevOps pip
 - **No fixed sleeps.** Asynchronous results are polled with Awaitility (`WaitUtils.waitUntil`), with timeout and interval taken from the configuration.
 - **The admin token is cached** for 10 minutes and shared by all scenarios, so parallel runs do not hammer the auth endpoint.
 - **Every scenario is tagged** with a test case ID (`@TC-1001`) and a suite tag (`@smoke`, `@regression`, `@security`, `@negative`), so any subset can be run from the command line or CI.
+- **Negative tests check more than the status code.** For example, after a rejected update (TC-1009) the booking is read again to prove the data did not change.
 
 ## Running the tests
 
@@ -98,7 +99,11 @@ Reports are written to `target/cucumber-reports/` (HTML and JSON). In GitHub Act
 | TC-1004 | Admin deletes a booking, then it returns 404 (polled with Awaitility) | regression |
 | TC-1005 | A booking cannot be deleted without a token (403) | security, regression |
 | TC-1006 | Create bookings with different total prices (Scenario Outline) | regression |
-| TC-1007 | Admin replaces all data of a booking, then GET returns the same data | regression |
+| TC-1007 | Admin replaces all data of a booking (PUT with token), then GET returns the same data | regression |
+| TC-1008 | Find a booking by the guest's first and last name (GET with query filters) | regression |
+| TC-1009 | A booking cannot be replaced without a token (403), and the data stays unchanged | security, regression |
+| TC-1010 | A booking that does not exist returns 404 | negative, regression |
+| TC-1011 | A created booking can be read back with the same data | regression |
 | TC-2001 | Admin gets a token with valid credentials | smoke, regression |
 | TC-2002 | No token for invalid credentials (Scenario Outline) | negative, regression |
 | TC-1901–1902 | Manual checks (admin screen dates, response headers) | manual |
