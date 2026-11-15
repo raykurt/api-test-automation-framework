@@ -82,3 +82,12 @@ Feature: Booking API
     Given a booking id that does not exist
     When the user gets the booking
     Then the response status code should be 404
+
+  @regression @TC-1011
+  Scenario: A created booking can be read back with the same data
+    Given a valid booking request is prepared
+    When the user creates the booking
+    Then the response status code should be 200
+    When the user gets the booking
+    Then the response status code should be 200
+    And the booking should match the sent data
