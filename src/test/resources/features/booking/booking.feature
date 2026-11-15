@@ -68,3 +68,11 @@ Feature: Booking API
     When the user searches bookings by the guest's first and last name
     Then the response status code should be 200
     And the search result should contain the created booking
+
+  @security @regression @TC-1009
+  Scenario: A booking cannot be replaced without a token
+    Given an existing booking
+    When the user replaces the booking without a token
+    Then the response status code should be 403
+    When the user gets the booking
+    Then the booking should match the sent data
