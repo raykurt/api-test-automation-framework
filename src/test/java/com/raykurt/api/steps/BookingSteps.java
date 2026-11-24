@@ -29,10 +29,13 @@ public class BookingSteps {
     private static final String BOOKING = ConfigReader.get("endpoint.booking");
 
     private final ScenarioContext context;
+    private final BookingClient bookingClient;
 
-    public BookingSteps(ScenarioContext context) {
+    public BookingSteps(ScenarioContext context,
+                    BookingClient bookingClient) {
         this.context = context;
-    }
+        this.bookingClient = bookingClient;
+}
 
     // ---------- Given ----------
 
@@ -64,11 +67,8 @@ public class BookingSteps {
 
     @When("the user creates the booking")
     public void theUserCreatesTheBooking() {
-        Response response = given()
-                .spec(RequestSpecFactory.defaultSpec())
-                .body(context.getRequestBody())
-            .when()
-                .post(BOOKING);
+        Response response =
+                bookingClient.createBooking(context.getRequestBody());
 
         context.setResponse(response);
         if (response.getStatusCode() == 200) {
