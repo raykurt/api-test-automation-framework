@@ -8,6 +8,7 @@ import com.raykurt.api.models.Booking;
 import com.raykurt.api.models.CreateBookingResponse;
 import com.raykurt.api.specs.RequestSpecFactory;
 import com.raykurt.api.utils.WaitUtils;
+import com.raykurt.api.clients.BookingClient;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
